@@ -4,8 +4,7 @@ import lombok.Value;
 
 @Value
 public class UserDto {
-    String username;
-    Boolean canOrder;
-    Boolean canCreate;
-    Boolean canModify;
+    String email;
+    String name;
+    User.Role role;
 }
