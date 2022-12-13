@@ -1,11 +1,13 @@
 package net.csonkadavidit.webdevapplication.service.user;
 
 import lombok.RequiredArgsConstructor;
+import net.csonkadavidit.webdevapplication.persistence.user.data.Address;
 import net.csonkadavidit.webdevapplication.persistence.user.data.User;
 import net.csonkadavidit.webdevapplication.persistence.user.data.UserDto;
 import net.csonkadavidit.webdevapplication.persistence.user.repo.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -23,7 +25,7 @@ public class UserServiceImpl implements UserService {
         String firstName = name.split(" ")[0];
         String lastName = name.replaceFirst(firstName, "");
 
-        User newUser = new User(null, email, firstName, lastName, password, User.Role.USER);
+        User newUser = new User(null, email, firstName, lastName, password, List.of(new Address()), User.Role.USER);
 
         userRepository.save(newUser);
         login(email, password);

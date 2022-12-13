@@ -2,10 +2,13 @@ package net.csonkadavidit.webdevapplication.persistence.config;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import net.csonkadavidit.webdevapplication.persistence.user.data.Address;
 import net.csonkadavidit.webdevapplication.persistence.user.data.User;
 import net.csonkadavidit.webdevapplication.persistence.user.repo.UserRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Profile("!persistent")
@@ -15,7 +18,15 @@ public class InMemoryInitializer {
 
     @PostConstruct
     public void init() {
-        User admin = new User(null, "admin@admin.com", "admin", "admin", "admin", User.Role.ADMIN);
+
+        User admin = new User(
+                null,
+                "admin@admin.com",
+                "admin",
+                "admin",
+                "admin",
+                List.of(new Address()),
+                User.Role.ADMIN);
 
         userRepository.save(admin);
     }
