@@ -4,7 +4,11 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'mainPageFood': "url('/src/assets/pexels-photo-326279.jpeg')"
+      }
+    },
   },
   plugins: [],
 }
