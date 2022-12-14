@@ -1,5 +1,6 @@
 package net.csonkadavidit.webdevapplication.persistence.user.data;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -8,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,9 +37,9 @@ public class User {
 
     private String password;
 
-    @ManyToMany
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
-    private List<Address> savedAddresses;
+    private Address savedAddresses;
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -5,6 +5,7 @@ import net.csonkadavidit.webdevapplication.persistence.user.data.UserDto;
 import net.csonkadavidit.webdevapplication.service.user.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -27,10 +29,8 @@ public class UserController {
 
         System.out.println("Registered user");
 
-        if(user.isPresent())
-            return ResponseEntity.status(HttpStatus.CREATED).body("User registered");
-        else
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        return user.map(userDto -> ResponseEntity.status(HttpStatus.CREATED).body("User registered"))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists"));
     }
 
     @PostMapping("/login")
@@ -39,10 +39,8 @@ public class UserController {
 
         System.out.println("Log in");
 
-        if(user.isPresent())
-            return ResponseEntity.status(HttpStatus.OK).body("User logged in");
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return user.map(userDto -> ResponseEntity.status(HttpStatus.OK).body("User logged in"))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 
     @PostMapping("/logout")
@@ -51,9 +49,17 @@ public class UserController {
 
         System.out.println("Log out");
 
-        if(user.isPresent())
-            return ResponseEntity.status(HttpStatus.OK).body("User logged out");
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        return user.map(userDto -> ResponseEntity.status(HttpStatus.OK).body("User logged out"))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+    }
+
+    @GetMapping("/current")
+    public ResponseEntity<UserDto> getCurrentUser() {
+        Optional<UserDto> user = userService.describe();
+
+        System.out.println("Describe");
+
+        return user.map(userDto -> ResponseEntity.status(HttpStatus.OK).body(userDto))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
     }
 }

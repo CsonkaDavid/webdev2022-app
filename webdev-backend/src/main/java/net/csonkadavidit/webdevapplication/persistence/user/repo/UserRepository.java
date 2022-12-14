@@ -4,8 +4,9 @@ import net.csonkadavidit.webdevapplication.persistence.user.data.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
-    User findByEmail(String email);
-    Integer countByEmail(String email);
+    Optional<User> findByEmail(String email);
 }

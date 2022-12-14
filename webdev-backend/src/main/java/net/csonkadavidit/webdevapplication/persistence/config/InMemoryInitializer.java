@@ -8,8 +8,6 @@ import net.csonkadavidit.webdevapplication.persistence.user.repo.UserRepository;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @Profile("!persistent")
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class InMemoryInitializer {
                 "admin",
                 "admin",
                 "admin",
-                List.of(new Address()),
+                new Address(),
                 User.Role.ADMIN);
 
         userRepository.save(admin);

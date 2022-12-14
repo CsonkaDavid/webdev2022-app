@@ -5,9 +5,9 @@ import net.csonkadavidit.webdevapplication.persistence.user.data.Address;
 import net.csonkadavidit.webdevapplication.persistence.user.data.User;
 import net.csonkadavidit.webdevapplication.persistence.user.data.UserDto;
 import net.csonkadavidit.webdevapplication.persistence.user.repo.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,13 +19,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> register(String email, String name, String password) {
-        if(userRepository.countByEmail(email) > 0)
+        if(userRepository.findByEmail(email).isPresent())
             return Optional.empty();
 
         String firstName = name.split(" ")[0];
         String lastName = name.replaceFirst(firstName, "");
 
-        User newUser = new User(null, email, firstName, lastName, password, List.of(new Address()), User.Role.USER);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        User newUser = new User(
+                null,
+                email,
+                firstName,
+                lastName,
+                bCryptPasswordEncoder.encode(password),
+                new Address(),
+                User.Role.USER);
 
         userRepository.save(newUser);
         login(email, password);
@@ -35,15 +44,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDto> login(String email, String password) {
-        if(userRepository.countByEmail(email) == 0)
+        Optional<User> existingUser = userRepository.findByEmail(email);
+
+        if(existingUser.isEmpty())
             return Optional.empty();
 
-        User existingUser = userRepository.findByEmail(email);
+        User user = existingUser.get();
 
         currentUser = new UserDto(
-                existingUser.getEmail(),
-                existingUser.getFirstName() + " " + existingUser.getLastName(),
-                existingUser.getRole()
+                user.getEmail(),
+                user.getFirstName() + " " + user.getLastName(),
+                user.getRole()
         );
 
         return Optional.of(currentUser);
@@ -59,6 +70,14 @@ public class UserServiceImpl implements UserService {
         currentUser = null;
 
         return Optional.of(currentUserCopy);
+    }
+
+    @Override
+    public Optional<UserDto> describe() {
+        if(currentUser == null)
+            return Optional.empty();
+
+        return Optional.of(currentUser);
     }
 
 }

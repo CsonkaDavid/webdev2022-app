@@ -1,0 +1,11 @@
+@tailwind components;
+
+@layer components {
+    .modalForm p {
+        @apply mt-[1vw] mb-1 ml-1
+    }
+
+    .modalForm input {
+        @apply w-[15rem] h-[1.7rem] border-slate-300 rounded-lg border-2 px-1 text-sm focus:outline-none focus:border-emerald-500
+    }
+}
