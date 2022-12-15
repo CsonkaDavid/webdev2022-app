@@ -44,6 +44,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "logged_in")
+    private Boolean loggedIn;
+
     public enum Role {
         ADMIN,
         RESTAURANT,

@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { IoMdPerson } from 'react-icons/io'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { LoginModal } from './LoginModal'
 import SignUpModal from './SignUpModal'
-import axios, { AxiosResponse } from 'axios'
+import { CustomAxios } from '../../script/CustomAxios'
 
-function PageHeader() {
-    const [loggedInState, setloggedInState] = useState(localStorage.getItem('loggedIn'))
+function PageHeader({ customAxios, changeSiteOnLogin, changeSiteOnLogOut }: { customAxios: CustomAxios, changeSiteOnLogin: any, changeSiteOnLogOut: any }) {
+    const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail'))
+    const [name, setName] = useState(localStorage.getItem('userName'))
     const [loginModalOn, setLoginModalOn] = useState(false)
     const [signUpModalOn, setSignUpModalOn] = useState(false)
 
@@ -19,33 +20,20 @@ function PageHeader() {
 
     const navigate = useNavigate()
 
-    const switchButtons = () => {
-        localStorage.setItem('loggedIn', '');
-        setloggedInState(localStorage.getItem('loggedIn'));
+    const handleLogOut = () => {
+        customAxios.logout(userEmail ? userEmail : '');
+        localStorage.setItem('userEmail', '');
+        setUserEmail(localStorage.getItem('userEmail'));
+        localStorage.setItem('userName', '');
+        changeSiteOnLogOut();
     }
 
-    const handleLogOut = () => {
+    const setNameToCurrent = async () => {
+        const currentEmail = localStorage.getItem('userEmail');
 
-        const email = localStorage.getItem('userEmail')
-        const password = localStorage.getItem('userPassword')
+        localStorage.setItem('userName', (await customAxios.getUser(currentEmail ? currentEmail : '')).data.name);
 
-        console.log(localStorage.getItem('loggedIn') ? 'true' : 'false')
-
-        axios.post('http://localhost:8888/user/logout', null, {
-            auth: {
-                username: email ? email : "",
-                password: password ? password : ""
-            }
-        })
-            .then((res: AxiosResponse) => {
-                console.log(res)
-
-                if (res.status == 200) {
-                    switchButtons()
-
-                    console.log(localStorage.getItem('loggedIn') ? 'true' : 'false')
-                }
-            })
+        setName(localStorage.getItem('userName'));
     }
 
     return (
@@ -53,10 +41,11 @@ function PageHeader() {
             <button className='text-[20px] bg-transparent ml-[10vw] font-medium' onClick={() => { navigate('/main') }}>
                 Webdevapp
             </button>
-            <div className='ml-auto mr-[5vw] py-auto items-center justify-center'>
+            <div className='ml-auto mr-[3vw] py-auto items-center justify-center'>
 
-                {loggedInState ?
-                    <AccountButtons logOut={handleLogOut} />
+                {userEmail ?
+                    <AccountButtons logOut={handleLogOut} navigate={navigate}
+                        name={name ? name : ''} />
                     :
                     <Buttons openLoginModal={openLoginModal} openSignUpModal={openSignUpModal} />
                 }
@@ -65,11 +54,30 @@ function PageHeader() {
 
             {loginModalOn &&
                 <LoginModal
+                    customAxios={customAxios}
                     handleClose={closeLoginModal}
                     handleSwitch={() => { closeLoginModal(); openSignUpModal() }}
-                    setLoginState={(s: any) => setloggedInState(s)} />}
+                    changeButtons={(email: string, password: string) => {
+                        localStorage.setItem('userEmail', email);
+                        localStorage.setItem('userPassword', password);
+                        setUserEmail(localStorage.getItem('userEmail'));
+                        setNameToCurrent();
+                        changeSiteOnLogin();
+                    }}
+                />}
 
-            {signUpModalOn && <SignUpModal handleClose={closeSignUpModal} />}
+            {signUpModalOn
+                && <SignUpModal
+                    customAxios={customAxios}
+                    handleClose={closeSignUpModal}
+                    changeButtons={(email: string, password: string) => {
+                        localStorage.setItem('userEmail', email);
+                        localStorage.setItem('userPassword', password);
+                        setUserEmail(localStorage.getItem('userEmail'));
+                        setNameToCurrent();
+                        changeSiteOnLogin();
+                    }}
+                />}
         </div>
     )
 }
@@ -89,16 +97,23 @@ function Buttons({ openLoginModal, openSignUpModal }: { openLoginModal: any, ope
     )
 }
 
-function AccountButtons({ logOut }: { logOut: any }) {
+function AccountButtons({ logOut, navigate, name }: { logOut: any, name: string, navigate: any }) {
     return (
         <div className='flex flex-row justify-center items-center h-[100%]'>
-            <button className='text-[1.5vw] mr-2 font-semibold' onClick={logOut}>
-                Log Out
+            <button className='text-[2vw] text-white bg-emerald-500 rounded-full h-[3vw] hover:bg-emerald-400 '
+                onClick={() => { navigate('/account') }}
+            >
+                <div className='flex flex-row items-center justify-center'>
+                    <p className='px-[1vw] text-[14px] font-semibold border-r-2'>
+                        {name}
+                    </p>
+                    <div className='px-[1vw]'>
+                        <IoMdPerson />
+                    </div>
+                </div>
             </button>
-
-            <button className='text-[2vw] m-auto text-white bg-emerald-500 rounded-full h-[3vw] w-[3vw] flex items-center justify-center
-         hover:bg-emerald-400 '>
-                <IoMdPerson />
+            <button className='text-[1.5vw] ml-4 font-semibold' onClick={logOut}>
+                Log Out
             </button>
         </div>
     )

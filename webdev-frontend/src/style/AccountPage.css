@@ -1,0 +1,12 @@
+@tailwind components;
+
+@layer components {
+    .accountTable td {
+        @apply w-[10vw] h-[10vh] px-4 text-black font-semibold text-sm
+    }
+
+    .admin-buttons button {
+        @apply bg-white px-2 rounded-lg py-1 border-2 border-white flex items-center justify-center text-sm mr-[2vw]
+         hover:border-emerald-400 hover:border-2
+    }
+}

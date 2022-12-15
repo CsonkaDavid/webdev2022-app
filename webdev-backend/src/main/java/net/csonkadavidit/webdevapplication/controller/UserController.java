@@ -25,7 +25,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestParam Map<String, String> userParams) {
         Optional<UserDto> user = userService
-                .register(userParams.get("email"), userParams.get("name"), userParams.get("password"));
+                .register(userParams.get("email"), userParams.get("firstName"), userParams.get("lastName"), userParams.get("password"));
 
         System.out.println("Registered user");
 
@@ -44,18 +44,17 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logoutUser() {
-        Optional<UserDto> user = userService.logout();
+    public ResponseEntity<String> logoutUser(@RequestParam String email) {
+        userService.logout(email);
 
         System.out.println("Log out");
 
-        return user.map(userDto -> ResponseEntity.status(HttpStatus.OK).body("User logged out"))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(null));
+        return ResponseEntity.status(HttpStatus.OK).body("User logged out");
     }
 
     @GetMapping("/current")
-    public ResponseEntity<UserDto> getCurrentUser() {
-        Optional<UserDto> user = userService.describe();
+    public ResponseEntity<UserDto> getCurrentUser(@RequestParam String email) {
+        Optional<UserDto> user = userService.describe(email);
 
         System.out.println("Describe");
 

@@ -1,0 +1,12 @@
+@tailwind components;
+
+@layer components {
+
+    .add-restaurant-inputs input {
+        @apply focus:outline-emerald-400 border-2 border-gray-300 rounded-lg text-sm px-1 mb-[5vh]
+    }
+
+    .add-restaurant-inputs p {
+        @apply mr-[2vw] mb-[5vh]
+    }
+}

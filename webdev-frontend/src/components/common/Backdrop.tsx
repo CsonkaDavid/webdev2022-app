@@ -8,7 +8,6 @@ function Backdrop({ children, onClick }: { children: any, onClick: any }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
         >
-
             {children}
         </motion.div>
     )

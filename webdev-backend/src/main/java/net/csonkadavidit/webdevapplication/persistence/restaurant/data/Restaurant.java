@@ -22,12 +22,13 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
     private String name;
 
     @Column(name = "delivery_price")
     private Integer deliveryPrice;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.MERGE)
     private List<RestaurantCategory> category;
 
     @ManyToMany(cascade = CascadeType.ALL)

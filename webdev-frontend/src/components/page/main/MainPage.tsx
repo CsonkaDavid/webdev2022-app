@@ -1,9 +1,12 @@
-import PageHeader from './common/PageHeader'
+import { CustomAxios } from "../../../script/CustomAxios";
+import PageHeader from "../../common/PageHeader";
 
 function MainPage() {
+    const customAxios = new CustomAxios();
+
     return (
         <div className='h-[100vh] bg-mainPageFood bg-no-repeat bg-cover'>
-            <PageHeader />
+            <PageHeader customAxios={customAxios} changeSiteOnLogin={null} changeSiteOnLogOut={null} />
             <div className='flex flex-row w-fit text-black bg-white ml-[8vw] mt-[12vh] rounded-xl px-[2vw] py-[3vw]'>
                 <div>
                     <div className='font-medium mb-[15vh] text-[4vw]'>

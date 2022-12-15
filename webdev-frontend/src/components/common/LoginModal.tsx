@@ -1,43 +1,29 @@
 import Modal from './Modal'
 import '../../style/ModalForm.css'
-import axios, { AxiosResponse } from 'axios'
 import { useState } from 'react'
+import { CustomAxios } from '../../script/CustomAxios'
 
-export function LoginModal({ handleClose, handleSwitch, setLoginState }: { handleClose: any, handleSwitch: any, setLoginState: any }) {
+export function LoginModal({ customAxios, handleClose, handleSwitch, changeButtons }
+    : { customAxios: CustomAxios, handleClose: any, handleSwitch: any, changeButtons: any }) {
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [loginFail, setLoginFail] = useState(false)
 
-    const sendLoginInfo = () => {
-        console.log(email)
-        console.log(password)
+    const handleSuccessfullLogin = () => {
+        handleClose();
+        changeButtons(email, password);
+    }
 
-        axios.post('http://localhost:8888/user/login',
-            null,
-            {
-                params: {
-                    email: email,
-                    password: password
-                },
-                auth: {
-                    username: email,
-                    password: password
-                }
-            }
-        )
-            .then((res: AxiosResponse) => {
-                if (res.status == 200) {
-                    handleClose()
-                    localStorage.setItem('loggedIn', res.data)
-                    setLoginState(localStorage.getItem('loggedIn'))
-                    localStorage.setItem('userEmail', email)
-                    localStorage.setItem('userPassword', password)
-                }
-            })
-            .catch(() => {
-                setLoginFail(true)
+    const sendLoginInfo = async () => {
+        await customAxios.login(email, password)
+            .then(() => {
+                handleSuccessfullLogin();
+            }).catch(() => {
+                setLoginFail(true);
             });
     }
+
 
     return (
         <Modal handleClose={handleClose}>

@@ -38,6 +38,11 @@ public class SecurityConfig {
                         User.Role.USER.name(),
                         User.Role.ADMIN.name(),
                         User.Role.RESTAURANT.name())
+                .requestMatchers("/restaurant/categories").permitAll()
+                .requestMatchers("/restaurant/restaurants").permitAll()
+                .requestMatchers("/restaurant/add/restaurant").hasAnyAuthority(
+                        User.Role.ADMIN.name()
+                )
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MainPage from "../MainPage";
+import AccountPage from "../page/account/AccountPage";
+import MainPage from "../page/main/MainPage";
 
 function NavigationRouter(props: any) {
     return (
@@ -7,6 +8,7 @@ function NavigationRouter(props: any) {
             <Routes>
                 <Route path="/main" element={<MainPage />} />
                 <Route path="*" element={<MainPage />} />
+                <Route path="/account" element={<AccountPage />} />
             </Routes>
             <>{props.children}</>
         </Router>
