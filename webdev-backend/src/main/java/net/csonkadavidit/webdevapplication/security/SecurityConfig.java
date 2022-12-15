@@ -43,6 +43,9 @@ public class SecurityConfig {
                 .requestMatchers("/restaurant/add/restaurant").hasAnyAuthority(
                         User.Role.ADMIN.name()
                 )
+                .requestMatchers("/restaurant/delete/restaurant").hasAnyAuthority(
+                        User.Role.ADMIN.name()
+                )
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

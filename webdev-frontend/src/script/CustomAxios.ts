@@ -86,6 +86,27 @@ export class CustomAxios {
         return promise;
     }
 
+    public async deleteRestaurant(name: string) {
+
+        const pass = localStorage.getItem('userPassword')
+        const email = localStorage.getItem('userEmail')
+
+        const promise = await axios.post(this.destination + '/restaurant/delete/restaurant',
+            null,
+            {
+                params: {
+                    name: name
+                },
+                auth: {
+                    username: email ? email : '',
+                    password: pass ? pass : ''
+                }
+            }
+        )
+
+        return promise;
+    }
+
     public async getRestaurants() {
         const promise = await axios.get(this.destination + '/restaurant/restaurants')
 

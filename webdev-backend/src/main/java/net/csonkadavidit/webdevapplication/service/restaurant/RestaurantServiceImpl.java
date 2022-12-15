@@ -35,6 +35,18 @@ public class RestaurantServiceImpl implements RestaurantService{
     }
 
     @Override
+    public Optional<RestaurantDto> deleteRestaurant(String name) {
+        Optional<Restaurant> restaurant = restaurantRepository.findByName(name);
+
+        if(restaurant.isEmpty())
+            return Optional.empty();
+
+        restaurantRepository.delete(restaurant.get());
+
+        return Optional.of(convertRestaurantDaoToDto(restaurant.get()));
+    }
+
+    @Override
     public Optional<RestaurantDto> addRestaurant(String name, Integer deliveryPrice, List<String> categories) {
         if(restaurantRepository.findByName(name).isPresent())
             return Optional.empty();

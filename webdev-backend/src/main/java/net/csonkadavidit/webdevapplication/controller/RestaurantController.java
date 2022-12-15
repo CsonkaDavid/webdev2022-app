@@ -53,4 +53,15 @@ public class RestaurantController {
         else
             return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
     }
+
+    @PostMapping("/delete/restaurant")
+    public ResponseEntity<String> deleteRestaurant(@RequestParam String name) {
+
+        Optional<RestaurantDto> newRestaurant = restaurantService.deleteRestaurant(name);
+
+        if(newRestaurant.isPresent())
+            return ResponseEntity.status(HttpStatus.OK).body("Restaurant deleted");
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
 }
