@@ -46,7 +46,7 @@ function AccountPage() {
         <div>
             <PageHeader customAxios={customAxios} changeSiteOnLogin={null} changeSiteOnLogOut={handleLogOut} />
             <div className='w-[100vw] bg-slate-300 flex flex-row'>
-                <div className='h-[92vh] w-[10vw] border-r-[1px] border-black pt-[4vh] bg-white'>
+                <div className='h-[92vh] w-[10vw] border-r-[1px] pt-[4vh] bg-white'>
                     <table className='accountTable'>
                         <tr>
                             <td>
@@ -69,7 +69,7 @@ function AccountPage() {
                     </table>
                 </div>
                 <div className='ml-[2vw] mt-[2vh]'>
-                    {accountDiv ? <AccountDiv /> :
+                    {accountDiv ? <AccountDiv customAxios={customAxios} /> :
                         adminDiv ? <AdminDiv customAxios={customAxios} /> : null}
                 </div>
             </div>

@@ -31,6 +31,14 @@ public class RestaurantController {
         return ResponseEntity.status(HttpStatus.OK).body(restaurantCategoryDtoList);
     }
 
+    @GetMapping("/restaurants")
+    public ResponseEntity<List<RestaurantDto>> getRestaurants() {
+        List<RestaurantDto> restaurantDtoList = restaurantService.getAllRestaurants();
+
+        return ResponseEntity.status(HttpStatus.OK).body(restaurantDtoList);
+    }
+
+
     @PostMapping("/add/restaurant")
     public ResponseEntity<String> addRestaurant(
             @RequestParam String name,

@@ -85,7 +85,6 @@ function AddRestaurantDiv({ customAxios }: { customAxios: CustomAxios }) {
                 <table>
                     <tr>
                         {
-
                             categories.map((element: any) => {
 
                                 return (

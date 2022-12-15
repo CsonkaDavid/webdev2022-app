@@ -4,8 +4,6 @@ export class CustomAxios {
     private destination: string = 'http://localhost:8888';
 
     public async getUser(email: string) {
-        console.log(email)
-
         const data = await axios.get(this.destination + '/user/current',
             {
                 params: {
@@ -37,9 +35,6 @@ export class CustomAxios {
 
     public logout(email: string) {
         const pass = localStorage.getItem('userPassword')
-
-        console.log(email)
-        console.log(pass)
 
         axios.post(this.destination + '/user/logout', null, {
             params: {
@@ -99,8 +94,6 @@ export class CustomAxios {
 
     public async getRestaurantCategories() {
         const promise = await axios.get(this.destination + '/restaurant/categories')
-
-        console.log(promise.data)
 
         return promise;
     }

@@ -30,6 +30,11 @@ public class RestaurantServiceImpl implements RestaurantService{
     }
 
     @Override
+    public List<RestaurantDto> getAllRestaurants() {
+        return restaurantRepository.findAll().stream().map(this::convertRestaurantDaoToDto).collect(Collectors.toList());
+    }
+
+    @Override
     public Optional<RestaurantDto> addRestaurant(String name, Integer deliveryPrice, List<String> categories) {
         if(restaurantRepository.findByName(name).isPresent())
             return Optional.empty();

@@ -28,7 +28,7 @@ function AdminDiv({ customAxios }: { customAxios: CustomAxios }) {
                 </button>
             </div>
             <div>
-                {restaurants ? <RestaurantsDiv /> : addRestaurant ? <AddRestaurantDiv customAxios={customAxios} /> : null}
+                {restaurants ? <RestaurantsDiv customAxios={customAxios} /> : addRestaurant ? <AddRestaurantDiv customAxios={customAxios} /> : null}
             </div>
         </div>
     );

@@ -9,5 +9,6 @@ import java.util.Optional;
 
 public interface RestaurantService {
     List<RestaurantCategoryDto> getAllRestaurantCategories();
+    List<RestaurantDto> getAllRestaurants();
     Optional<RestaurantDto> addRestaurant(String name, Integer deliveryPrice, List<String> categories);
 }
